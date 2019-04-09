@@ -54,13 +54,13 @@ const userSchema = new mongoose.Schema({//membuat collection di mongoose, nama u
     timestamps:true
 })
 
-userSchema.pre('save', async function (next) { // do something before save the document () next akan diisi oleh mongoose
-    const user = this // access to the user document {name, age, email, password}
+// userSchema.pre('save', async function (next) { // do something before save the document () next akan diisi oleh mongoose
+//     const user = this // access to the user document {name, age, email, password}
 
-        user.password = await bcrypt.hash(user.password, 8) // hash the new incoming password
+//         user.password = await bcrypt.hash(user.password, 8) // hash the new incoming password
 
-    next() // finish
-})
+//     next() // finish
+// })
 
 const User = mongoose.model('User', userSchema)
 

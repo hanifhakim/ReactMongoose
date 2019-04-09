@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import {onRegister} from '../actions'
+import {connect} from 'react-redux'
 
 class Register extends Component{
+
+    onButtonClick = () => {
+        const name = this.name.value
+        const age = this.age.value
+        const email = this.email.value
+        const pass = this.password.value
+        this.props.onRegister(name, age, email, pass)
+    }
+
     render(){
         return(
             <div>
@@ -28,7 +39,7 @@ class Register extends Component{
                             </div>
                             <form className="input-group"><input ref={input => this.password = input} className="form-control" type="password" /></form>
                             <div className="d-flex justify-content-center my-3">
-                                <button className="btn btn-success btn-block" onClick={this.onButtonClick}>Login</button>
+                                <button className="btn btn-success btn-block" onClick={this.onButtonClick}>Register</button>
                             </div>
                             {/* {this.onErrorRegister()} */}
                             <p className="lead">Do you have account ? <Link to="/login">Sign In!</Link></p>
@@ -40,4 +51,4 @@ class Register extends Component{
     }
 }
 
-export default Register
+export default connect(null,{onRegister})(Register) 
