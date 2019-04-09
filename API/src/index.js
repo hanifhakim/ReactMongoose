@@ -1,6 +1,6 @@
 const express = require('express')
 const port = require('./config/index')
-require('./config/mongoose')
+// require('./config/mongoose')
 
 const app = express()
 app.use(express.json())
