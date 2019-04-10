@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import {onLogin} from '../actions'
+import {connect} from 'react-redux'
 
 class Login extends Component{
+    onButtonClick = () => {
+        const email = this.email.value
+        const pass = this.password.value
+        this.props.onLogin(email, pass)
+    }
+   
     render(){
         return(
             <div className="mt-5 row">
@@ -30,4 +38,4 @@ class Login extends Component{
     }
 }
 
-export default Login
+export default connect(null,{onLogin})(Login) 
