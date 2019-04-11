@@ -43,7 +43,7 @@ app.post('/users/login', async (req, res) => {
     }
 })
 
-app.post('/tasks/:userid', async (req, res) => {
+app.post('/tasks/:userid', async (req, res) => {//create by user id
     try {
         const user = await User.findById(req.params.userid) // search user by id
         if(!user){ // jika user tidak ditemukan
@@ -59,6 +59,58 @@ app.post('/tasks/:userid', async (req, res) => {
     }
 })
 
+app.get('/tasks/:userid', async (req, res) => {
+    try {
+        //find mengirim dalam bentuk array
+       const user = await User.find({_id: req.params.userid})
+                     .populate({path:'tasks'}).exec()
+    
+       res.send(user[0].tasks)//ambil data yg dibutuhkan di dlm array
+    } catch (e) {
+        
+    }
+})
+
+app.delete('/tasks', async (req, res) => {
+    try {
+        const task = await Task.findOneAndDelete({_id: req.body.id})
+
+        if(!task){
+            return res.status(404).send("Delete failed")
+        }
+
+        res.status(200).send(task)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
+
+app.patch('/tasks/:taskid/:userid', async (req, res) => {
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['description', 'completed']
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update))
+
+    if(!isValidOperation) {
+        return res.status(400).send({err: "Invalid request!"})
+    }
+
+    try {
+        const task = await Task.findOne({_id: req.params.taskid, owner: req.params.userid})
+        
+        if(!task){
+            return res.status(404).send("Update Request")
+        }
+        
+        updates.forEach(update => task[update] = req.body[update])
+        await task.save()
+        
+        res.send("update berhasil")
+        
+        
+    } catch (e) {
+        
+    }
+})
 
 
 app.listen(port, ()=> console.log('API berhasil running di port', port))

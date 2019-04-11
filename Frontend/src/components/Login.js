@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import {onLogin} from '../actions'
 import {connect} from 'react-redux'
 
@@ -11,6 +11,9 @@ class Login extends Component{
     }
    
     render(){
+        if(this.props.user.name !== ""){
+            return <Redirect to ="/"/>
+        }
         return(
             <div className="mt-5 row">
                 <div className="col-sm-3 mx-auto card">
@@ -38,4 +41,9 @@ class Login extends Component{
     }
 }
 
-export default connect(null,{onLogin})(Login) 
+const mapStateToProps = (state) => {
+    return{
+        user:state.auth
+    }
+}
+export default connect(mapStateToProps,{onLogin})(Login) 

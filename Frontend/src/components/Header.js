@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import { connect } from "react-redux";
 import {
     Button,
     Collapse,
@@ -31,6 +32,39 @@ class Header extends Component{
       }
 
     render(){
+        if(this.props.user.name !== ""){
+            return(
+                <div>
+                    <Navbar color="light" light expand="md">
+                        <div className="container">
+                            <Link className="navbar-brand" to="/">ReactMongoose</Link>
+                            <NavbarToggler onClick={this.toggle} />
+                            <Collapse isOpen={this.state.isOpen} navbar>
+                                <Nav className="ml-auto" navbar>
+                                    <NavItem>
+                                        <Link className="nav-link" to="/">Tasks</Link>
+                                    </NavItem>
+                                    <UncontrolledDropdown nav inNavbar>
+                                        <DropdownToggle nav caret>
+                                            Hallo {this.props.user.name}
+                                        </DropdownToggle>
+                                        <DropdownMenu right>
+                                            <Link className="dropdown-item" to="/profile">
+                                                <DropdownItem>Profile</DropdownItem>
+                                            </Link>
+                                            <DropdownItem divider />
+                                            <Button className="dropdown-item" onClick={this.props.onLogout}>
+                                                Log out
+                                    </Button>
+                                        </DropdownMenu>
+                                    </UncontrolledDropdown>
+                                </Nav>
+                            </Collapse>
+                        </div>
+                    </Navbar>
+                   </div>
+               )       
+        }
         return(
          <div>
                 <Navbar color="light" light expand="md">
@@ -56,5 +90,9 @@ class Header extends Component{
         )
     }
 }
-
-export default Header
+const mapStateToProps = (state) => {
+    return{
+        user:state.auth
+    }
+}
+export default connect(mapStateToProps)(Header)

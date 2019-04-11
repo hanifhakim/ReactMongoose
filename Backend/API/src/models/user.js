@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({//membuat collection di mongoose, nama u
         type: Buffer
     },
     tasks : [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,//ambil data obj dari collection task
         ref: 'Task'
     }]
 },{
@@ -57,8 +57,9 @@ const userSchema = new mongoose.Schema({//membuat collection di mongoose, nama u
 //hash password before save
 userSchema.pre('save', async function (next) { // do something before save the document () next akan diisi oleh mongoose
     const user = this // access to the user document {name, age, email, password}
-
+    if(user.isModified('password')){//apakah password mengalami
         user.password = await bcrypt.hash(user.password, 8) // hash the new incoming password
+    }
 
     next() // finish
 })
